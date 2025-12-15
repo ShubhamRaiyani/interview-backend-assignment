@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: internship-backend
+  data:
+    mongodb:
+      uri: ${MONGODB_URI}
+      database: ${MONGODB_DATABASE}  
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${SUPABASE_ISSUER}
+          jws-algorithm: HS256
+    secret: ${SUPABASE_JWT_SECRET}
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+support:
+  email: ${SUPPORT_EMAIL}
+
+
+server:
+  port: 8080
+
+logging:
+  level:
+    com.shubham.internship_backend: DEBUG
+    org.springframework.security: DEBUG
