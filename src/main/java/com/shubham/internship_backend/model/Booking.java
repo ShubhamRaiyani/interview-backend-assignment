@@ -24,7 +24,7 @@ public class Booking {
 
     private String hotelId;
 
-    private String userId; // Supabase sub
+    private String createdBy; // staff_user_id (Supabase sub)
 
     // 👇 Guest (customer) details
     private String guestName;

@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,9 +16,10 @@ public class EmailService {
 
     private final JavaMailSender mailSender;
 
-    @Value("${support.email:support@otelier-demo.com}")
+    @Value("${support.email}")
     private String supportEmail;
 
+    @Async
     public void sendBookingNotification(Booking booking) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
@@ -46,7 +48,7 @@ public class EmailService {
                 booking.getHotelId(),
                 booking.getGuestName(),
                 booking.getGuestEmail(),
-                booking.getUserId(),
+                booking.getCreatedBy(),
                 booking.getStartDate(),
                 booking.getEndDate());
     }

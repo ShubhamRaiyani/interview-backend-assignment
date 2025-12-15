@@ -3,8 +3,10 @@ package com.shubham.internship_backend.service;
 import com.shubham.internship_backend.dto.BookingRequest;
 import com.shubham.internship_backend.exception.BadRequestException;
 import com.shubham.internship_backend.exception.ConflictException;
+import com.shubham.internship_backend.exception.ResourceNotFoundException;
 import com.shubham.internship_backend.model.Booking;
 import com.shubham.internship_backend.repository.BookingRepository;
+import com.shubham.internship_backend.repository.HotelRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,14 +20,23 @@ import java.util.List;
 public class BookingService {
 
     private final BookingRepository bookingRepository;
+    private final HotelRepository hotelRepository;
     private final EmailService emailService;
 
     public List<Booking> getBookings(String hotelId) {
+        if (!hotelRepository.existsById(hotelId)) {
+            throw new ResourceNotFoundException("Hotel not found with ID: " + hotelId);
+        }
         return bookingRepository.findByHotelIdOrderByStartDateAsc(hotelId);
     }
 
-    public Booking createBooking(String hotelId, String userId, BookingRequest request) {
-        log.info("Attempting to create booking for user: {} at hotel: {}", userId, hotelId);
+    public Booking createBooking(String hotelId, String createdBy, BookingRequest request) {
+        log.info("Attempting to create booking by user: {} at hotel: {}", createdBy, hotelId);
+
+        // 0. Validate Hotel Exists
+        if (!hotelRepository.existsById(hotelId)) {
+            throw new ResourceNotFoundException("Hotel not found with ID: " + hotelId);
+        }
 
         // 1. Invalid Date Range Conflict
         if (!request.getStartDate().isBefore(request.getEndDate())) {
@@ -47,7 +58,7 @@ public class BookingService {
         // 3. Create and Save Booking
         Booking booking = Booking.builder()
                 .hotelId(hotelId)
-                .userId(userId)
+                .createdBy(createdBy)
                 .guestName(request.getGuestName())
                 .guestEmail(request.getGuestEmail())
                 .startDate(request.getStartDate())

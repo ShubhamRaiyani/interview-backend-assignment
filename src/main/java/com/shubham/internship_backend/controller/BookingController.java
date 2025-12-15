@@ -1,5 +1,6 @@
 package com.shubham.internship_backend.controller;
 
+import com.shubham.internship_backend.dto.ApiResponse;
 import com.shubham.internship_backend.dto.BookingRequest;
 import com.shubham.internship_backend.model.Booking;
 import com.shubham.internship_backend.service.BookingService;
@@ -24,13 +25,14 @@ public class BookingController {
     private final BookingService bookingService;
 
     @GetMapping
-    public ResponseEntity<List<Booking>> getBookings(@PathVariable String hotelId) {
-        return ResponseEntity.ok(bookingService.getBookings(hotelId));
+    public ResponseEntity<ApiResponse<List<Booking>>> getBookings(@PathVariable String hotelId) {
+        List<Booking> bookings = bookingService.getBookings(hotelId);
+        return ResponseEntity.ok(ApiResponse.success("Bookings fetched successfully", bookings));
     }
 
     @PostMapping
     @PreAuthorize("hasAnyRole('STAFF', 'RECEPTION')")
-    public ResponseEntity<Booking> createBooking(
+    public ResponseEntity<ApiResponse<Booking>> createBooking(
             @PathVariable String hotelId,
             @Valid @RequestBody BookingRequest request,
             @AuthenticationPrincipal Jwt jwt) {
@@ -39,6 +41,6 @@ public class BookingController {
         log.info("Received booking request for hotel: {} from user: {}", hotelId, userId);
 
         Booking booking = bookingService.createBooking(hotelId, userId, request);
-        return new ResponseEntity<>(booking, HttpStatus.CREATED);
+        return new ResponseEntity<>(ApiResponse.success("Booking created successfully", booking), HttpStatus.CREATED);
     }
 }
