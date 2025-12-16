@@ -4,6 +4,7 @@ import com.shubham.internship_backend.model.Hotel;
 import com.shubham.internship_backend.repository.HotelRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -16,8 +17,16 @@ public class HotelDataSeeder implements CommandLineRunner {
 
     private final HotelRepository hotelRepository;
 
+    @Value("${app.seed-data:false}")
+    private boolean seedDataEnabled;
+
     @Override
     public void run(String... args) {
+
+        if (!seedDataEnabled) {
+            log.info("⏭️ Data seeding disabled");
+            return;
+        }
 
         List<Hotel> hotels = List.of(
                 Hotel.builder()

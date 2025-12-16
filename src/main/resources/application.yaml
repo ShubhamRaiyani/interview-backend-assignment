@@ -9,7 +9,6 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: ${SUPABASE_ISSUER}
           jws-algorithm: HS256
     secret: ${SUPABASE_JWT_SECRET}
   mail:
@@ -23,7 +22,8 @@ spring:
           auth: true
           starttls:
             enable: true
-
+app:
+  seed-data: false
 support:
   email: ${SUPPORT_EMAIL}
 

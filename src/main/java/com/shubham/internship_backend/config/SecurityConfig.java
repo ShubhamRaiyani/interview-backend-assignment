@@ -1,6 +1,6 @@
 package com.shubham.internship_backend.config;
 
-import com.shubham.internship_backend.security.SupabaseJwtAuthenticationConverter;
+import com.shubham.internship_backend.security.SupabaseJwtConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,10 +26,10 @@ public class SecurityConfig {
         @Value("${spring.security.secret}")
         private String jwtSecret;
 
-        private final SupabaseJwtAuthenticationConverter supabaseJwtAuthenticationConverter;
+        private final SupabaseJwtConverter supabaseJwtConverter;
 
-        public SecurityConfig(SupabaseJwtAuthenticationConverter supabaseJwtAuthenticationConverter) {
-                this.supabaseJwtAuthenticationConverter = supabaseJwtAuthenticationConverter;
+        public SecurityConfig(SupabaseJwtConverter supabaseJwtConverter) {
+                this.supabaseJwtConverter = supabaseJwtConverter;
         }
 
         @Bean
@@ -39,15 +39,13 @@ public class SecurityConfig {
                                 .sessionManagement(session -> session
                                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                                 .authorizeHttpRequests(auth -> auth
-                                                // Public Endpoints (Actuator)
-                                                .requestMatchers("/actuator/**").permitAll()
                                                 // Secured Endpoints
                                                 .anyRequest().authenticated())
                                 .oauth2ResourceServer(oauth2 -> oauth2
                                                 .jwt(jwt -> jwt
                                                                 .decoder(jwtDecoder())
                                                                 .jwtAuthenticationConverter(
-                                                                                supabaseJwtAuthenticationConverter)));
+                                                                                supabaseJwtConverter)));
 
                 return http.build();
         }
