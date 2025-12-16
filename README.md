@@ -1,8 +1,8 @@
   # Hotel Booking Backend Service
 
-  A secure backend service for managing hotel bookings, built as a **take-home internship assignment for Otelier**. The service focuses on clean backend design, secure authentication, booking conflict detection, and production-ready deployment practices.
+  A secure backend service for managing hotel bookings, built as a **take-home internship assignment **. The service focuses on clean backend design, secure authentication, booking conflict detection, and production-ready deployment practices.
 
-  > **Otelier Backend Assignment – Java**
+  > **Backend Assignment – Java**
 
   ---
 
@@ -220,7 +220,7 @@
     ],
     "claims": {
       "sub": "user-uuid-1234",
-      "email": "admin@otelier.com",
+      "email": "admin@example.com",
       "app_metadata": {
         "role": "ADMIN"
       },
@@ -297,7 +297,7 @@
 
   ```bash
   # MongoDB
-  SPRING_DATA_MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/otelier
+  SPRING_DATA_MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/db
 
   # Supabase JWT
   SPRING_SECURITY_SECRET=your-supabase-jwt-secret
@@ -305,7 +305,7 @@
   # Email (Gmail SMTP)
   SPRING_MAIL_USERNAME=your-email@gmail.com
   SPRING_MAIL_PASSWORD=your-app-password
-  SUPPORT_EMAIL=support@otelier.com
+  SUPPORT_EMAIL=support@example.com
 
   # Data Seeding
   APP_SEED_DATA=true
@@ -352,13 +352,15 @@
 
   ```bash
   # Build Docker image
-  docker build -t otelier-backend:latest .
+  docker build -t interview-backend-assignment
+:latest .
 
   # Run container
   docker run -p 8080:8080 \
     -e SPRING_DATA_MONGODB_URI=... \
     -e SPRING_SECURITY_SECRET=... \
-    otelier-backend:latest
+    interview-backend-assignment
+:latest
   ```
 
   ---
