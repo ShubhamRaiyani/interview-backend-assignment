@@ -91,6 +91,67 @@
   **Write operations** are restricted to `STAFF`, `RECEPTION`, and `ADMIN` roles.
   **Read operations** are available to any authenticated user.
 
+  ### 🔑 How to Get Access Token
+
+  This service relies on **Supabase Authentication** as an external Identity Provider (IdP).
+  No credentials or tokens are stored in this repository.
+
+  #### Supported Roles
+
+  Roles are assigned at the identity provider level using `app_metadata.role`.
+
+  | Role | Permissions |
+  |------|-------------|
+  | `STAFF` | Create & view bookings |
+  | `RECEPTION` | Create & view bookings |
+  | `ADMIN` | Create & view bookings (future extensibility) |
+  | Authenticated user (no role) | View bookings only |
+
+  #### Option 1: Get JWT via Supabase Dashboard (Recommended)
+
+  1. Open **Supabase Dashboard** → **Authentication** → **Users**
+
+  2. Create a user (or use an existing one)
+
+  3. Assign role in `app_metadata`, for example:
+     ```json
+     {
+       "role": "ADMIN"
+     }
+     ```
+
+  4. Sign in using Supabase Auth (email/password)
+
+  5. Copy the issued `access_token`
+
+  6. Use the token in API requests:
+     ```
+     Authorization: Bearer <ACCESS_TOKEN>
+     ```
+
+  #### Option 2: Verify Token & Role (Debug)
+
+  Use the debug endpoint to confirm token structure and role extraction:
+
+  ```
+  GET /api/auth/me
+  ```
+
+  This endpoint returns:
+  - `sub` (user identifier)
+  - Granted authorities
+  - Full JWT claims
+
+  **Note**: Intended for development/debugging only.
+
+  #### Security Note
+
+  🔐 **Security**
+
+  - No real credentials, passwords, or JWT tokens are committed to this repository.
+  - Reviewers are expected to generate their own access tokens via Supabase.
+  - In production, RS256 with JWKS would be preferred over HS256.
+
   ---
 
   ## 🗄 Database Design (MongoDB Atlas)
